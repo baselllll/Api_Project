@@ -66,4 +66,12 @@ class AdminAuthController extends Controller{
         $admin = Admin::all();
         return response()->json(['authenticated-admin' => $admin], 200);
     }
+    public function logoutUser(Request $request){
+        $admin = Admin::where('email',$request->email)->first();
+        $userTokens = $admin->tokens;
+        foreach($userTokens as $token) {
+            $token->revoke();   
+        }
+        return response(['message' => 'You have been successfully logged out.'], 200);
+    }
 }
